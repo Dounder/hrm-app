@@ -1,4 +1,5 @@
 /* eslint-disable */
+/// <reference types="vite/client" />
 
 declare namespace NodeJS {
   interface ProcessEnv {
@@ -6,4 +7,13 @@ declare namespace NodeJS {
     VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined;
     VUE_ROUTER_BASE: string | undefined;
   }
+}
+
+interface ImportMetaEnv {
+  readonly VITE_APP_TITLE: string;
+  readonly VITE_API_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
