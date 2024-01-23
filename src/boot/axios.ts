@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { useAuth } from 'src/auth';
+import { useConfig } from 'src/shared';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -8,7 +9,9 @@ declare module '@vue/runtime-core' {
   }
 }
 
-const api = axios.create({ baseURL: import.meta.env.VITE_API_URL });
+const { apiUrl } = useConfig();
+
+const api = axios.create({ baseURL: apiUrl });
 
 api.interceptors.request.use(
   (config) => {
