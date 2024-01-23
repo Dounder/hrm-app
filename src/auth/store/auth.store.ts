@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
+import { User, UserRole } from 'src/users';
 import { computed, ref } from 'vue';
-import { User } from '../interfaces';
 
 interface AuthStoreProps {
   user: User | null;
@@ -20,7 +20,13 @@ export const useAuthStore = defineStore('auth', () => {
     accessToken,
 
     //* Getters
-    isAuthenticated: computed(() => !!refreshToken.value && !!accessToken.value),
+    isAuthenticated: computed(() => !!refreshToken.value && !!accessToken.value && !!user.value),
+    userHasRoles: (roleIds: UserRole[]) =>
+      computed(() => {
+        if (!user.value || !user.value.roles) return false;
+        const userRoleIds = user.value.roles.map((role) => role.id);
+        return roleIds.some((roleId) => userRoleIds.includes(roleId));
+      }),
 
     //! Actions
     saveInLocalStorage() {
@@ -38,6 +44,14 @@ export const useAuthStore = defineStore('auth', () => {
       refreshToken.value = props.refreshToken;
       accessToken.value = props.accessToken;
       this.saveInLocalStorage();
+    },
+    logout() {
+      user.value = null;
+      refreshToken.value = null;
+      accessToken.value = null;
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
     },
   };
 });
