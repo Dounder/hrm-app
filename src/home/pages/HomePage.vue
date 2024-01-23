@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1>HomePage</h1>
+  <q-page padding class="flex flex-center">
+    <div class="text-h6">Home Page</div>
+  </q-page>
 </template>
 
 <style lang="scss" scoped></style>

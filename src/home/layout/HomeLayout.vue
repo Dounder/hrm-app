@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { LateralMenu } from '../components';
 
-const drawer = ref(true);
+const drawer = ref(false);
 </script>
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
 
@@ -19,8 +20,8 @@ const drawer = ref(true);
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="drawer" side="left" bordered>
-      <!-- drawer content -->
+    <q-drawer show-if-above v-model="drawer" side="left" bordered :breakpoint="1000">
+      <LateralMenu />
     </q-drawer>
 
     <q-page-container>
