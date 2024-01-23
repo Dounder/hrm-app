@@ -2,7 +2,7 @@
 
 <template>
   <q-page padding class="flex flex-center">
-    <div class="text-h6">Home Page</div>
+    <div class="text-h6">Users Page</div>
   </q-page>
 </template>
 
