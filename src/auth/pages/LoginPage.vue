@@ -3,29 +3,30 @@ import { QForm } from 'quasar';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { requiredFieldValidation } from 'src/shared';
-import LoginIcon from '../components/LoginIcon.vue';
-import useNotify from '../../shared/composables/useNotify';
+import { requiredFieldValidation, useNotify } from 'src/shared';
+import { useAuth, LoginIcon } from '..';
 
-const { notify } = useNotify();
+const { login } = useAuth();
+const { basic } = useNotify();
 const router = useRouter();
 
-const loginForm = reactive({ username: '', password: '' });
+const loginForm = reactive({ username: 'admin', password: 'Admin@1234' });
 const formRef = ref<QForm | null>(null);
 const viewPassword = ref(false);
 const isLoading = ref(false);
 
-const onSubmit = () => {
+const onSubmit = async () => {
   if (formRef.value === null || !formRef.value.validate()) return;
 
   isLoading.value = true;
-  console.log('Submitted');
 
-  setTimeout(() => {
-    isLoading.value = false;
-    notify({ message: 'Login successful', type: 'positive', position: 'top-right' });
-    router.replace({ name: 'home.page' });
-  }, 2000);
+  await login(loginForm);
+
+  basic({ message: 'Logged in successfully', color: 'primary', icon: 'check' });
+
+  router.push({ name: 'home.page' });
+
+  isLoading.value = false;
 };
 
 const onReset = () => {
@@ -87,5 +88,6 @@ const onReset = () => {
 }
 .card {
   width: min(100%, 65rem);
+  height: 35rem;
 }
 </style>
