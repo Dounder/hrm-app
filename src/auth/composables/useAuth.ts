@@ -27,7 +27,6 @@ const useAuth = () => {
     logout: store.logout,
     login: async ({ username, password }: LoginProps) => {
       try {
-        console.log('login', username, password);
         const { data } = await api.post<LoginResponse>('/auth/login', { username, password });
 
         store.setData({
