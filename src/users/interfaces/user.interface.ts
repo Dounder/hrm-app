@@ -20,3 +20,10 @@ export enum UserRole {
   Manager = 4,
   Employee = 5,
 }
+
+export interface NewUser {
+  username: string;
+  email: string;
+  password: string;
+  roles: string[];
+}

@@ -7,10 +7,15 @@ import { LateralMenu } from '../components';
 
 const { replace } = useRouter();
 const drawer = ref(false);
+const loading = ref(false);
 
 const handleLogout = () => {
-  replace({ name: 'auth.login' });
-  useAuth().logout();
+  loading.value = true;
+  setTimeout(() => {
+    replace({ name: 'auth.login' });
+    useAuth().logout();
+    loading.value = false;
+  }, 2000);
 };
 </script>
 
@@ -19,14 +24,10 @@ const handleLogout = () => {
     <q-header class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
-
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>
-          Title
-        </q-toolbar-title>
-        <q-btn color="primary" icon="check" label="OK" @click="handleLogout()" />
+        <q-toolbar-title> Human Resource Management </q-toolbar-title>
+        <q-btn flat color="white" icon="sym_o_logout" @click="handleLogout()" :loading="loading">
+          <q-tooltip anchor="center left" self="center end" class="bg-transparent text-white text-overline"> Log Out </q-tooltip>
+        </q-btn>
       </q-toolbar>
     </q-header>
 

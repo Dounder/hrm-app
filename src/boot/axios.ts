@@ -17,7 +17,7 @@ api.interceptors.request.use(
   (config) => {
     const { accessToken } = useAuth();
 
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = `Bearer ${accessToken.value}`;
 
     return config;
   },
