@@ -32,6 +32,8 @@ const useUserMutation = () => {
       for (const user of users) requests.push(addUser(user));
 
       await Promise.all(requests);
+
+      console.log('Bulk users added');
     },
     //? Methods
   };

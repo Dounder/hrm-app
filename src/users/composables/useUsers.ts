@@ -1,48 +1,60 @@
-import { api } from 'src/boot';
-import { Pagination } from 'src/shared';
-import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/vue-query';
-import { User } from '../interfaces/user.interface';
-import { reactive, ref } from 'vue';
+import { useInfiniteQuery } from '@tanstack/vue-query';
+import { computed, ref } from 'vue';
 
-const getUsers = async (pagination: Pagination): Promise<User[]> => {
-  const { limit = 30, offset = 0 } = pagination;
+import { api } from 'src/boot';
+
+const getUsers = async ({ pageParam = 0 }) => {
+  const limit = 20;
+  const offset = pageParam * limit; // Calculate the offset
 
   const params = new URLSearchParams();
   params.append('limit', limit.toString());
   params.append('offset', offset.toString());
 
-  const { data } = await api.get<User[]>('/users', { params });
+  const { data } = await api.get('/users', { params });
 
-  return data;
+  // Determine if it's the last page (if data.length is less than limit, it's likely the last page)
+  const isLastPage = data.length < limit;
+
+  return {
+    items: data, // the actual data
+    nextPage: isLastPage ? undefined : pageParam + 1, // return undefined if it's the last page, else increment pageParam
+  };
 };
 
 const useUsers = () => {
-  const queryClient = useQueryClient();
-  const pagination = reactive<Pagination>({ limit: 30, offset: 0 });
-  const isLastPage = ref(false);
+  const page = ref(1);
 
-  const usersQuery = useQuery({
-    queryKey: ['users', pagination],
-    queryFn: () => getUsers(pagination),
-    placeholderData: keepPreviousData,
+  const {
+    data: users,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isPending,
+  } = useInfiniteQuery({
+    queryKey: ['users', page.value],
+    queryFn: getUsers,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: undefined,
   });
 
-  const nextPage = () => {
-    if (isLastPage.value) return;
-
-    pagination.offset += pagination.limit;
-    queryClient.prefetchQuery({
-      queryKey: ['users', pagination],
-      queryFn: () => getUsers(pagination),
-    });
+  const loadMore = () => {
+    if (hasNextPage.value) fetchNextPage();
   };
 
   return {
     //* Props
-    usersQuery,
+    users: computed(() => users.value?.pages.flatMap((page) => page.items)),
+    isFetching,
+    isFetchingNextPage,
+    isLoading,
+    isPending,
+    hasNextPage,
     //! Getters
     //? Methods
-    nextPage,
+    loadMore,
   };
 };
 
