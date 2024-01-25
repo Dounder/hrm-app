@@ -10,7 +10,7 @@ const { login } = useAuth();
 const { basic } = useNotify();
 const router = useRouter();
 
-const loginForm = reactive({ username: 'sboyland0', password: 'Lg1U(F' });
+const loginForm = reactive({ username: 'admin', password: 'Admin@1234' });
 const formRef = ref<QForm | null>(null);
 const viewPassword = ref(false);
 const isLoading = ref(false);
@@ -22,7 +22,7 @@ const onSubmit = async () => {
 
   const message = await login(loginForm);
 
-  basic({ message: message, color: 'primary', position: 'top' });
+  basic({ message: message, color: 'secondary', position: 'top' });
 
   router.replace({ name: 'home.page' });
 

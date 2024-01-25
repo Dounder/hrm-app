@@ -12,8 +12,8 @@ defineProps<Props>();
     <q-card-section class="flex column q-gutter-y-sm">
       <div class="text-h6">{{ user.username }}</div>
       <div class="text-subtitle2">{{ user.email }}</div>
-      <div>Roles: {{ user.roles.map((role) => role.name).join(', ') }}</div>
-      <div class="text-grey-6">Created At: {{ new Date(user.createdAt).toLocaleDateString() }}</div>
+      <div class="text-subtitle2">Roles: {{ user.roles.map((role) => role.name).join(', ') }}</div>
+      <div class="text-grey-6 text-overline">Created At: {{ new Date(user.createdAt).toLocaleDateString() }}</div>
     </q-card-section>
   </q-card>
 </template>
