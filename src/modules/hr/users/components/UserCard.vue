@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNotify } from 'src/modules/common';
+import { useNotify, useDialog } from 'src/modules/common';
 import { User, useUpdateUser, useUser } from '..';
 import { ref } from 'vue';
 
@@ -11,6 +11,7 @@ const props = defineProps<Props>();
 const { store } = useUser();
 const { deleteUserMutation, restoreUserMutation } = useUpdateUser();
 const { warning, info } = useNotify();
+const { confirmDialog } = useDialog();
 const isUpdating = ref(false);
 const isDeleting = ref(false);
 const isRestoring = ref(false);
@@ -23,10 +24,23 @@ const onEdit = () => {
 };
 
 const onDelete = async () => {
-  isDeleting.value = true;
-  await deleteUserMutation.mutateAsync(props.user.id);
-  warning({ message: `El usuario ${props.user.username} ha sido eliminado exitosamente`, position: 'top-right' });
-  setTimeout(() => (isDeleting.value = false), 200);
+  const result = confirmDialog({
+    title: 'Eliminar usuario',
+    message: `¿Está seguro que desea eliminar el usuario ${props.user.username}?`,
+    isDelete: true,
+    position: 'top',
+  });
+
+  result.onCancel(() => {
+    warning({ message: 'La operación ha sido cancelada', position: 'top-right' });
+  });
+
+  result.onOk(async () => {
+    isDeleting.value = true;
+    await deleteUserMutation.mutateAsync(props.user.id);
+    warning({ message: `El usuario ${props.user.username} ha sido eliminado exitosamente`, position: 'top-right' });
+    setTimeout(() => (isDeleting.value = false), 200);
+  });
 };
 
 const onRestore = async () => {
@@ -49,13 +63,13 @@ const onRestore = async () => {
       </div>
     </q-card-section>
     <q-card-actions align="right">
-      <q-btn flat round color="secodary" icon="sym_o_restart_alt" @click="onRestore" v-if="user.deletedAt">
-        <q-tooltip anchor="top middle" self="bottom middle">Restaurar</q-tooltip>
-      </q-btn>
       <q-btn flat round color="primary" icon="sym_o_edit" @click="onEdit">
         <q-tooltip anchor="top middle" self="bottom middle">Editar</q-tooltip>
       </q-btn>
-      <q-btn flat round color="negative" icon="sym_o_delete" @click="onDelete">
+      <q-btn flat round color="secodary" icon="sym_o_restart_alt" @click="onRestore" v-if="user.deletedAt">
+        <q-tooltip anchor="top middle" self="bottom middle">Restaurar</q-tooltip>
+      </q-btn>
+      <q-btn flat round color="negative" icon="sym_o_delete" @click="onDelete" v-if="!user.deletedAt">
         <q-tooltip anchor="top middle" self="bottom middle">Eliminar</q-tooltip>
       </q-btn>
     </q-card-actions>
