@@ -8,6 +8,21 @@ export interface User {
   deletedAt: null | Date;
 }
 
+export interface NewUser {
+  username: string;
+  email: string;
+  password: string;
+  roles: string[];
+}
+
+export interface UserToUpdate {
+  id: number;
+  password: string | null;
+  username: string;
+  email: string;
+  roles: Roles[];
+}
+
 export interface Roles {
   id: number;
   name: string;
@@ -19,11 +34,4 @@ export enum UserRole {
   Guest = 3,
   Manager = 4,
   Employee = 5,
-}
-
-export interface NewUser {
-  username: string;
-  email: string;
-  password: string;
-  roles: string[];
 }

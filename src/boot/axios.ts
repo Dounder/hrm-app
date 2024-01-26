@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { useAuth } from 'src/modules/auth';
-import { useConfig } from 'src/shared';
+import { useConfig } from 'src/modules/common';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {

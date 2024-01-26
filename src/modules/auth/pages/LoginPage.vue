@@ -3,7 +3,7 @@ import { QForm } from 'quasar';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { requiredFieldValidation, useNotify } from 'src/shared';
+import { requiredField, useNotify } from 'src/modules/common';
 import { useAuth, LoginIcon } from '..';
 
 const { login } = useAuth();
@@ -55,7 +55,7 @@ const onReset = () => {
               :loading="isLoading"
               :readonly="isLoading"
               lazy-rules
-              :rules="[requiredFieldValidation]"
+              :rules="[requiredField]"
               autofocus
             />
             <q-input
@@ -65,7 +65,7 @@ const onReset = () => {
               :loading="isLoading"
               :readonly="isLoading"
               lazy-rules
-              :rules="[requiredFieldValidation]"
+              :rules="[requiredField]"
             >
               <template v-slot:append>
                 <q-icon :name="viewPassword ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="viewPassword = !viewPassword" />
@@ -91,3 +91,4 @@ const onReset = () => {
   height: 35rem;
 }
 </style>
+src/modules/common

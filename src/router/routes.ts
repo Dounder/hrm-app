@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('src/shared/pages/ErrorNotFound.vue'),
+    component: () => import('src/modules/common/pages/ErrorNotFound.vue'),
   },
 ];
 

@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { PageLayout } from 'src/shared';
-import { UserCard, useUsers } from '../';
+import { PageLayout } from 'src/modules/common';
+import { UserCard, UserRole, useUsers, useUser, AddUserDialog, UpdateUserDialog } from '../';
+import { useAuth } from 'src/modules/auth';
 
+const { userHasRoles } = useAuth();
 const { users, isFetchingNextPage, loadMore } = useUsers();
+const { store } = useUser();
 
 const onLoad = () => {
   if (isFetchingNextPage.value) return;
@@ -15,9 +18,11 @@ const onLoad = () => {
   <PageLayout :loading-more="isFetchingNextPage" @load:more="onLoad">
     <template v-slot:header>
       <h1 class="text-h4 q-ma-none">Usuarios</h1>
-      <q-btn outline dense color="primary" icon="sym_o_add" padding=".5rem 1rem" @click="() => {}">
-        <q-tooltip anchor="center left" self="center end" class="bg-transparent text-primary text-overline">Agregar Usuario</q-tooltip>
-      </q-btn>
+      <template v-if="userHasRoles([UserRole.Admin])">
+        <q-btn outline dense color="primary" icon="sym_o_add" padding=".5rem 1rem" @click="store.setAddDialog(true)">
+          <q-tooltip anchor="center left" self="center end" class="bg-transparent text-primary text-overline">Agregar Usuario</q-tooltip>
+        </q-btn>
+      </template>
     </template>
 
     <template v-slot:body>
@@ -30,7 +35,8 @@ const onLoad = () => {
       </template>
     </template>
   </PageLayout>
+  <AddUserDialog />
+  <UpdateUserDialog />
 </template>
 
 <style lang="scss" scoped></style>
-.. ..

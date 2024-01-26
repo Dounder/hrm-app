@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PageLayout } from 'src/shared';
+import { PageLayout } from 'src/modules/common';
 import { useEmployees } from '../composable';
 import EmployeeCard from '../components/EmployeeCard.vue';
 
@@ -34,3 +34,4 @@ const onLoad = () => {
 </template>
 
 <style lang="scss" scoped></style>
+src/modules/common
