@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { useAuth } from 'src/auth';
+import { useAuth } from 'src/modules/auth';
 import { useConfig } from 'src/shared';
 
 declare module '@vue/runtime-core' {

@@ -4,7 +4,6 @@ import PageHeader from './PageHeader.vue';
 
 interface Props {
   loadingMore: boolean;
-  hasMore: boolean;
 }
 interface Emits {
   (e: 'load:more'): void;
@@ -24,7 +23,7 @@ const pageTweak = (offset: number) => ({ height: `calc(100vh - ${offset}px)` });
 
     <q-separator spaced />
 
-    <PageBody :loading="loadingMore" :has-more="hasMore" @load:more="emits('load:more')">
+    <PageBody :loading="loadingMore" @load:more="emits('load:more')">
       <slot name="body" />
     </PageBody>
   </q-page>

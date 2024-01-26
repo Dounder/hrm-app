@@ -4,7 +4,6 @@ import { ref, watch } from 'vue';
 
 interface Props {
   loading: boolean;
-  hasMore: boolean;
 }
 
 interface Emits {
@@ -34,10 +33,6 @@ watch(
       <section class="page-grid">
         <slot />
 
-        <article class="page-no-data" v-if="!hasMore">
-          <span class="text-h4 text-grey-6">No more data to load...</span>
-        </article>
-
         <article class="flex flex-center q-py-lg page-loading" v-if="loading">
           <q-spinner-facebook color="primary" size="3rem" :thickness="5" />
         </article>
@@ -60,12 +55,6 @@ watch(
   &-loading {
     grid-column: 1 / -1;
     height: 15rem;
-  }
-  &-no-data {
-    grid-column: 1 / -1;
-    height: 5rem;
-    display: grid;
-    place-items: center;
   }
 }
 </style>
