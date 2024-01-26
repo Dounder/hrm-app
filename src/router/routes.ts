@@ -1,10 +1,11 @@
-import { authRoutes } from 'src/auth/router';
-import { employeeRoutes } from 'src/employee/router/employee.routes';
-import { homeRoutes } from 'src/home';
 import { RouteRecordRaw } from 'vue-router';
 
+import { adminRoutes } from 'src/modules/admin';
+import { authRoutes } from 'src/modules/auth/router';
+import { employeeRoutes } from 'src/modules/employee';
+
 const routes: RouteRecordRaw[] = [
-  ...homeRoutes,
+  ...adminRoutes,
   ...authRoutes,
   ...employeeRoutes,
 
@@ -12,7 +13,7 @@ const routes: RouteRecordRaw[] = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('src/shared/pages/ErrorNotFound.vue'),
+    component: () => import('src/modules/common/pages/ErrorNotFound.vue'),
   },
 ];
 

@@ -3,7 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from './auth';
+import { useAuth } from './modules/auth';
 
 useAuth().loadDataFromLocalStorage();
 </script>
+./modules/auth
