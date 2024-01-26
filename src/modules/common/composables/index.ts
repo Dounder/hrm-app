@@ -1,2 +1,3 @@
-export { default as useNotify } from './useNotify';
-export { default as useConfig } from './useConfig';
+export * from './useNotify';
+export * from './useConfig';
+export * from './useDialog';

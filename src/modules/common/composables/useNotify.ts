@@ -11,7 +11,7 @@ interface CustomNotificationProps extends NotificationProps {
 }
 type notifyPosition = 'top' | 'left' | 'right' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
 
-const useNotify = () => {
+export const useNotify = () => {
   const $q = useQuasar();
 
   return {
