@@ -3,14 +3,14 @@ import { QForm } from 'quasar';
 import { reactive, ref } from 'vue';
 
 import { DialogLayout, emailValidation, passwordValidation, requiredField, requiredOption, useNotify } from 'src/modules/common';
-import { type NewUser, UserRole, useCreateUser, useRoles, useUser } from '../';
+import { useCreateUser, useRoles, useUser, type NewUser } from '../';
 
 const { store, showAddDialog } = useUser();
 const { createUserMutation } = useCreateUser();
 const { rolesQuery } = useRoles();
-const { success } = useNotify();
+const { notify } = useNotify();
 
-const user: NewUser = reactive({ username: '', email: '', password: '', roles: [] });
+const user: NewUser = reactive({ username: '', email: '', password: '', roles: ['User'] });
 const userForm = ref<QForm | null>(null);
 
 const onSubmit = async () => {
@@ -18,12 +18,17 @@ const onSubmit = async () => {
 
   await createUserMutation.mutateAsync(user);
 
-  success({ message: `El usuario ${user.username} ha sido creado exitosamente`, position: 'top-right' });
+  notify({ type: 'positive', message: `El usuario ${user.username} ha sido creado exitosamente`, position: 'top-right' });
 
   onReset();
 };
 
 const onReset = () => {
+  userForm.value?.resetValidation();
+  user.username = '';
+  user.email = '';
+  user.password = '';
+  user.roles = ['User'];
   store.setAddDialog(false);
 };
 </script>
@@ -43,7 +48,7 @@ const onReset = () => {
         filled
         v-model="user.roles"
         multiple
-        :options="rolesQuery.data.value?.filter((role) => role.id !== UserRole.Employee) || []"
+        :options="rolesQuery.data.value || []"
         :loading="rolesQuery.isLoading.value"
         :readonly="rolesQuery.isLoading.value"
         :option-value="(role) => role.name"

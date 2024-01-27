@@ -25,7 +25,7 @@ const useUpdateUser = () => {
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
     onSuccess(updatedUser) {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
 
       queryClient.setQueryData(['users'], (oldQueryData?: { pages: { items: User[]; nextPage?: number }[] }) => {
         // If there's no data, initialize the first page with the new user
@@ -43,7 +43,7 @@ const useUpdateUser = () => {
   const deleteUserMutation = useMutation({
     mutationFn: deleteUser,
     onSuccess(deletedUserId) {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
 
       queryClient.setQueryData(['users'], (oldQueryData?: { pages: { items: User[]; nextPage?: number }[] }) => {
         // If there's no data, initialize the first page with the new user
@@ -64,7 +64,7 @@ const useUpdateUser = () => {
   const restoreUserMutation = useMutation({
     mutationFn: restoreUser,
     onSuccess(restoredUserId) {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
 
       queryClient.setQueryData(['users'], (oldQueryData?: { pages: { items: User[]; nextPage?: number }[] }) => {
         // If there's no data, initialize the first page with the new user
