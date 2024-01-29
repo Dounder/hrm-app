@@ -1,4 +1,4 @@
-import { useQuasar } from 'quasar';
+import { Dialog } from 'quasar';
 
 interface Props {
   message: string;
@@ -8,13 +8,12 @@ interface Props {
 }
 
 export const useDialog = () => {
-  const $q = useQuasar();
   return {
     alertDialog: ({ title, message }: Props) => {
-      $q.dialog({ title, message });
+      Dialog.create({ title, message });
     },
     confirmDialog: ({ title, message, isDelete = false, position = 'standard' }: Props) => {
-      return $q.dialog({
+      return Dialog.create({
         title,
         message,
         cancel: true,
