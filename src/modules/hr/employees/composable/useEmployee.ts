@@ -3,9 +3,11 @@ import { useEmployeeStore } from '..';
 
 export const useEmployee = () => {
   const store = useEmployeeStore();
-  const { showAddEmployee, showUpdateEmployee } = storeToRefs(store);
+  const { showAddEmployee, showUpdateEmployee, employeeToUpdate } = storeToRefs(store);
+
   return {
     //* Props
+    employeeToUpdate,
     showAddEmployee,
     showUpdateEmployee,
 
@@ -14,6 +16,7 @@ export const useEmployee = () => {
     //? Methods
     setShowAddEmployee: store.setShowAddEmployee,
     setShowUpdateEmployee: store.setShowUpdateEmployee,
+    setEmployeeToUpdate: store.setEmployeeToUpdate,
   };
 };
 

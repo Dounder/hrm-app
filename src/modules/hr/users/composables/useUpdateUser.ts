@@ -28,14 +28,13 @@ const useUpdateUser = () => {
       queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
 
       queryClient.setQueryData(['users'], (oldQueryData?: { pages: { items: User[]; nextPage?: number }[] }) => {
-        // If there's no data, initialize the first page with the new user
-        if (!oldQueryData?.pages) return { pages: [{ items: [updatedUser], nextPage: 1 }] };
+        // Use optional chaining and nullish coalescing for cleaner code
+        const pages = oldQueryData?.pages ?? [{ items: [], nextPage: 1 }];
 
-        // Otherwise, add the new user to the first page
-        const firstPage = oldQueryData.pages[0];
-        const updatedFirstPage = { ...firstPage, items: [updatedUser, ...firstPage.items] };
+        // Directly create the new first page and update the array
+        const updatedFirstPage = { ...pages[0], items: [updatedUser, ...pages[0].items] };
 
-        return { ...oldQueryData, pages: [updatedFirstPage, ...oldQueryData.pages.slice(1)] };
+        return { pages: [updatedFirstPage, ...pages.slice(1)] };
       });
     },
   });

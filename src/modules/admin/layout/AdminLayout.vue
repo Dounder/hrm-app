@@ -26,7 +26,7 @@ const handleLogout = () => {
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
         <q-toolbar-title> Human Resource Management </q-toolbar-title>
         <q-btn flat color="white" icon="sym_o_logout" @click="handleLogout()" :loading="loading">
-          <q-tooltip anchor="center left" self="center end" class="bg-transparent text-white text-overline"> Log Out </q-tooltip>
+          <q-tooltip anchor="center left" self="center end" class="bg-transparent text-white text-overline">Cerrar sesión</q-tooltip>
         </q-btn>
       </q-toolbar>
     </q-header>
