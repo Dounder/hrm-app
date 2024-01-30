@@ -22,7 +22,7 @@ const getEmployees = async ({ pageParam = 0 }) => {
   };
 };
 
-const useUsers = () => {
+export const useEmployees = () => {
   const page = ref(1);
 
   const {
@@ -57,5 +57,3 @@ const useUsers = () => {
     loadMore,
   };
 };
-
-export default useUsers;
