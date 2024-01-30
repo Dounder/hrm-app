@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { PageLayout } from 'src/modules/common';
-import { UserCard, UserRole, useUsers, useUser, AddUserDialog, UpdateUserDialog } from '../';
 import { useAuth } from 'src/modules/auth';
+import { PageLayout } from 'src/modules/common';
+import { AddUserDialog, UpdateUserDialog, UserCard, UserRole, useUser, useUsers } from '../';
 
-const { userHasRoles, accessToken } = useAuth();
-const { users, isFetchingNextPage, loadMore } = useUsers();
+const { userHasRoles } = useAuth();
+const { users, isFetchingNextPage, isLoading, loadMore } = useUsers();
 const { store } = useUser();
 
 const onLoad = () => {
@@ -15,7 +15,7 @@ const onLoad = () => {
 </script>
 
 <template>
-  <PageLayout :loading-more="isFetchingNextPage" @load:more="onLoad">
+  <PageLayout :loading-more="isFetchingNextPage || isLoading" @load:more="onLoad">
     <template v-slot:header>
       <h1 class="text-h4 q-ma-none">Usuarios</h1>
       <template v-if="userHasRoles([UserRole.Admin])">

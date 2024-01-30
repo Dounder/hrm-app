@@ -30,13 +30,13 @@ watch(
 <template>
   <section class="page-body">
     <q-scroll-area class="full-height full-width" :thumb-style="thumbStyle" :bar-style="barStyle" ref="scrollAreaRef">
-      <section class="page-grid">
+      <TransitionGroup name="body-transition" tag="section" class="page-grid">
         <slot />
+      </TransitionGroup>
 
-        <article class="flex flex-center q-py-lg page-loading" v-if="loading">
-          <q-spinner-facebook color="primary" size="3rem" :thickness="5" />
-        </article>
-      </section>
+      <article class="flex flex-center q-py-lg full-grid" v-if="loading">
+        <q-spinner-facebook color="primary" size="3rem" :thickness="5" />
+      </article>
     </q-scroll-area>
   </section>
 </template>
@@ -51,10 +51,6 @@ watch(
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     grid-gap: 1rem;
     padding: 1rem;
-  }
-  &-loading {
-    grid-column: 1 / -1;
-    height: 15rem;
   }
 }
 </style>

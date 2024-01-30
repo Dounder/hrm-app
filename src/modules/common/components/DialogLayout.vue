@@ -25,7 +25,7 @@ watch(
 </script>
 
 <template>
-  <q-dialog v-model="isShowing" :position="props.position" @hide="emits('on:hide')">
+  <q-dialog v-model="isShowing" :position="props.position" @hide="emits('on:hide')" persistent>
     <q-card class="card">
       <slot />
     </q-card>

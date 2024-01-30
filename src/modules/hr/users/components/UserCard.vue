@@ -10,7 +10,7 @@ interface Props {
 const props = defineProps<Props>();
 const { store } = useUser();
 const { deleteUserMutation, restoreUserMutation } = useUpdateUser();
-const { warning, info } = useNotify();
+const { notify } = useNotify();
 const { confirmDialog } = useDialog();
 const isUpdating = ref(false);
 const isDeleting = ref(false);
@@ -32,13 +32,13 @@ const onDelete = async () => {
   });
 
   result.onCancel(() => {
-    warning({ message: 'La operación ha sido cancelada', position: 'top-right' });
+    notify({ type: 'warning', message: 'La operación ha sido cancelada', position: 'top-right' });
   });
 
   result.onOk(async () => {
     isDeleting.value = true;
     await deleteUserMutation.mutateAsync(props.user.id);
-    warning({ message: `El usuario ${props.user.username} ha sido eliminado exitosamente`, position: 'top-right' });
+    notify({ type: 'warning', message: `El usuario ${props.user.username} ha sido eliminado exitosamente`, position: 'top-right' });
     setTimeout(() => (isDeleting.value = false), 200);
   });
 };
@@ -46,7 +46,7 @@ const onDelete = async () => {
 const onRestore = async () => {
   isRestoring.value = true;
   await restoreUserMutation.mutateAsync(props.user.id);
-  info({ message: `El usuario ${props.user.username} ha sido restaurado exitosamente`, position: 'top-right' });
+  notify({ type: 'info', message: `El usuario ${props.user.username} ha sido restaurado exitosamente`, position: 'top-right' });
   setTimeout(() => (isRestoring.value = false), 200);
 };
 </script>

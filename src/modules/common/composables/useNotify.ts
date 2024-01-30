@@ -1,25 +1,36 @@
-import { NamedColor, useQuasar } from 'quasar';
+import { NamedColor, useQuasar, Notify } from 'quasar';
 
-interface NotificationProps {
+interface PredefinedNotificationProps {
   message: string;
-  position?: notifyPosition;
+  type: NotifyType;
+  position?: NotifyPosition;
 }
 
-interface CustomNotificationProps extends NotificationProps {
+interface CustomNotificationProps {
+  message: string;
   color?: NamedColor;
   icon?: string | undefined;
+  position?: NotifyPosition;
 }
-type notifyPosition = 'top' | 'left' | 'right' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
 
-export const useNotify = () => {
+type NotifyPosition = 'top' | 'left' | 'right' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+type NotifyType = 'positive' | 'negative' | 'warning' | 'info' | 'ongoing';
+
+export const useNotify = (composition = false) => {
   const $q = useQuasar();
 
   return {
-    success: ({ message, position = 'bottom' }: NotificationProps) => $q.notify({ type: 'positive', message, position }),
-    error: ({ message, position = 'bottom' }: NotificationProps) => $q.notify({ type: 'negative', message, position }),
-    warning: ({ message, position = 'bottom' }: NotificationProps) => $q.notify({ type: 'warning', message, position }),
-    info: ({ message, position = 'bottom' }: NotificationProps) => $q.notify({ type: 'info', message, position }),
-    basic: ({ message, position = 'bottom', color = 'primary', icon }: CustomNotificationProps) => $q.notify({ color, message, position, icon }),
+    notify: ({ message, position = 'top', type }: PredefinedNotificationProps) => {
+      if (composition) return $q.notify({ type, message, position });
+
+      return Notify.create({ type, message, position });
+    },
+
+    notifyCustom: ({ message, position = 'bottom', color = 'primary', icon }: CustomNotificationProps) => {
+      if (composition) return $q.notify({ message, position, color, icon });
+
+      return Notify.create({ message, position, color, icon });
+    },
   };
 };
 

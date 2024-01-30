@@ -7,7 +7,7 @@ import { requiredField, useNotify } from 'src/modules/common';
 import { useAuth, LoginIcon } from '..';
 
 const { login } = useAuth();
-const { basic } = useNotify();
+const { notifyCustom } = useNotify();
 const router = useRouter();
 
 const loginForm = reactive({ username: 'admin', password: 'Admin@1234' });
@@ -22,7 +22,7 @@ const onSubmit = async () => {
 
   const message = await login(loginForm);
 
-  basic({ message: message, color: 'secondary', position: 'top' });
+  notifyCustom({ message: message, color: 'secondary', position: 'top' });
 
   router.replace({ name: 'dashboard.page' });
 

@@ -14,7 +14,7 @@ services:
       - hrmsql:/var/opt/mssql
   api:
     container_name: hrm_api
-    image: drglasdou/hrm-api:2024_01_26
+    image: drglasdou/hrm-api:2024_01_27
     ports:
       - "8080:8080"
       - "8081:8081"
