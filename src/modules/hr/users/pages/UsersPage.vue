@@ -3,7 +3,7 @@ import { PageLayout } from 'src/modules/common';
 import { UserCard, UserRole, useUsers, useUser, AddUserDialog, UpdateUserDialog } from '../';
 import { useAuth } from 'src/modules/auth';
 
-const { userHasRoles } = useAuth();
+const { userHasRoles, accessToken } = useAuth();
 const { users, isFetchingNextPage, loadMore } = useUsers();
 const { store } = useUser();
 
@@ -31,6 +31,7 @@ const onLoad = () => {
       </article>
 
       <template v-else>
+        <div>{{ accessToken?.split('.')[2] }}</div>
         <UserCard v-for="user in users" :key="user.id" :user="user" />
       </template>
     </template>
