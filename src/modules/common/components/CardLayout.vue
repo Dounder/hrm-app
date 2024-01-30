@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useDialog, useNotify } from '../composables';
+import { useAuth } from 'src/modules/auth';
+import { UserRole } from 'src/modules/hr/users';
 
 interface Props {
   deleted: boolean;
@@ -16,12 +18,14 @@ interface Emits {
 
 const props = defineProps<Props>();
 const emits = defineEmits<Emits>();
+const { userHasRoles } = useAuth();
 const { confirmDialog } = useDialog();
 const { notify } = useNotify();
 
 const isUpdating = ref(false);
 const isDeleting = ref(false);
 const isRestoring = ref(false);
+const isAdmin = userHasRoles([UserRole.Admin]);
 
 const onEdit = () => {
   isUpdating.value = true;
@@ -64,12 +68,14 @@ const onRestore = async () => {
       <q-btn flat round color="primary" icon="sym_o_edit" @click="onEdit" :loading="isUpdating" v-if="!deleted">
         <q-tooltip anchor="top middle" self="bottom middle">Editar</q-tooltip>
       </q-btn>
-      <q-btn flat round color="secodary" icon="sym_o_restart_alt" @click="onRestore" :loading="isRestoring" v-if="deleted">
-        <q-tooltip anchor="top middle" self="bottom middle">Restaurar</q-tooltip>
-      </q-btn>
-      <q-btn flat round color="negative" icon="sym_o_delete" @click="onDelete" :loading="isDeleting" v-if="!deleted">
-        <q-tooltip anchor="top middle" self="bottom middle">Eliminar</q-tooltip>
-      </q-btn>
+      <template v-if="userHasRoles([UserRole.Admin]).value">
+        <q-btn flat round color="secondary" icon="sym_o_restart_alt" @click="onRestore" :loading="isRestoring" v-if="deleted">
+          <q-tooltip anchor="top middle" self="bottom middle">Restaurar</q-tooltip>
+        </q-btn>
+        <q-btn flat round color="negative" icon="sym_o_delete" @click="onDelete" :loading="isDeleting" v-if="!deleted">
+          <q-tooltip anchor="top middle" self="bottom middle">Eliminar</q-tooltip>
+        </q-btn>
+      </template>
     </q-card-actions>
   </q-card>
 </template>

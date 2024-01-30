@@ -75,7 +75,7 @@ export const useEmployeeMutation = () => {
   type EmployeeData = { pages: { items: Employee[]; nextPage?: number }[] } | undefined;
 
   const updateData = (employee: void | AddEmployeeResponse) => {
-    queryClient.invalidateQueries({ queryKey: ['employees'], exact: false });
+    queryClient.cancelQueries({ queryKey: ['employees'], exact: false });
 
     queryClient.setQueryData(['employees'], (oldQueryData: EmployeeData) => {
       // Use optional chaining and nullish coalescing for cleaner code
