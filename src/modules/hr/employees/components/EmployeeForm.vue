@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
 import { QForm } from 'quasar';
+import { onMounted, reactive, ref, watch } from 'vue';
 
-import { Department, EmployeeToUpdate, NewEmployee, Position } from '..';
 import { currencyValidation, dateValidation, emailValidation, rangeValidation, requiredField } from 'src/modules/common';
+import { EmployeeToUpdate, NewEmployee, useEmployeeExtensions } from '..';
 
 interface Props {
   formData: NewEmployee | EmployeeToUpdate;
-  departments: Department[];
-  loadingDepartments: boolean;
-  positions: Position[];
-  loadingPositions: boolean;
+  type: 'create' | 'update';
 }
 interface Emits {
   (e: 'on:submit', formData: NewEmployee | EmployeeToUpdate): void;
@@ -20,6 +17,9 @@ interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+const { getDepartmentsQuery, getPositionsQuery, departmentId } = useEmployeeExtensions();
+
 const formData = reactive(props.formData);
 const form = ref<QForm | null>(null);
 
@@ -33,6 +33,17 @@ const onReset = () => {
   emit('on:reset');
   form.value?.resetValidation();
 };
+
+onMounted(() => {
+  if (props.formData.departmentId) departmentId.value = props.formData.departmentId;
+});
+
+watch(
+  () => formData.departmentId,
+  (newId) => {
+    if (!!newId) formData.positionId = null;
+  }
+);
 </script>
 
 <template>
@@ -76,30 +87,30 @@ const onReset = () => {
       <q-select
         filled
         v-model="formData.departmentId"
-        :options="departments"
+        :options="getDepartmentsQuery.data.value || []"
         :option-value="(position) => position.id"
         :option-label="(position) => position.name"
-        :loading="loadingDepartments"
+        :loading="getDepartmentsQuery.isLoading.value"
         emit-value
         map-options
         label="Departamento*"
         :rules="[requiredField]"
         lazy-rules
         class="col-6 q-col-gutter-sm"
-        @update:model-value="formData.positionId = null"
+        @update:model-value="departmentId = formData.departmentId ?? 0"
       />
       <q-select
         filled
         v-model="formData.positionId"
-        :options="positions"
+        :options="getPositionsQuery.data.value || []"
         :option-value="(position) => position.id"
         :option-label="(position) => position.name"
-        :loading="loadingPositions"
+        :loading="getPositionsQuery.isLoading.value"
         emit-value
         map-options
         label="Puesto*"
         :rules="[requiredField]"
-        :disable="!formData.departmentId || loadingDepartments"
+        :disable="!formData.departmentId || getDepartmentsQuery.isLoading.value"
         lazy-rules
         class="col-6 q-col-gutter-sm"
       />
@@ -107,7 +118,7 @@ const onReset = () => {
 
     <div class="flex justify-end q-gutter-sm">
       <q-btn no-caps label="Cancelar" type="button" color="negative" flat @click="onReset" />
-      <q-btn no-caps label="Crear" type="submit" color="primary" />
+      <q-btn no-caps :label="type === 'create' ? 'Agregar' : 'Actualizar'" type="submit" color="primary" />
     </div>
   </QForm>
 </template>

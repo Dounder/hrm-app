@@ -2,10 +2,9 @@
 import { ref } from 'vue';
 
 import { DialogLayout, useNotify } from 'src/modules/common';
-import { EmployeeForm, useEmployee, useEmployeeExtensions, useEmployeeMutation } from '..';
+import { EmployeeForm, useEmployee, useEmployeeMutation } from '..';
 
 const { showUpdateEmployee, setEmployeeToUpdate, setShowUpdateEmployee, employeeToUpdate } = useEmployee();
-const { getDepartmentsQuery, getPositionsQuery } = useEmployeeExtensions();
 const { updateEmployeeMutation } = useEmployeeMutation();
 const { notify } = useNotify();
 const isLoading = ref(false);
@@ -37,16 +36,7 @@ const onReset = () => {
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
 
-    <EmployeeForm
-      v-if="employeeToUpdate"
-      :form-data="employeeToUpdate"
-      :departments="getDepartmentsQuery.data.value || []"
-      :loading-departments="getDepartmentsQuery.isLoading.value"
-      :positions="getPositionsQuery.data.value || []"
-      :loading-positions="getPositionsQuery.isLoading.value"
-      @on:submit="onSubmit"
-      @on:reset="onReset"
-    />
+    <EmployeeForm type="update" v-if="employeeToUpdate" :form-data="employeeToUpdate" @on:submit="onSubmit" @on:reset="onReset" />
   </DialogLayout>
 </template>
 
