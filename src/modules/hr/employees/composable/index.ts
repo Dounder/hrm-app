@@ -1,1 +1,2 @@
-export { default as useEmployees } from './useEmployees';
+export { useEmployees } from './useEmployees';
+export { useEmployee } from './useEmployee';

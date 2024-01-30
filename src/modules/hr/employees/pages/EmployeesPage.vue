@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { PageLayout } from 'src/modules/common';
-import { useEmployees } from '../composable';
-import EmployeeCard from '../components/EmployeeCard.vue';
+import { useEmployees, EmployeeCard, useEmployee, AddEmployeeDialog } from '../';
 
 const { isFetchingNextPage, employees, loadMore } = useEmployees();
+const { setShowAddEmployee } = useEmployee();
 
 const onLoad = () => {
   if (isFetchingNextPage.value) return;
@@ -16,7 +16,7 @@ const onLoad = () => {
   <PageLayout :loading-more="isFetchingNextPage" @load:more="onLoad">
     <template v-slot:header>
       <h1 class="text-h4 q-ma-none">Empleados</h1>
-      <q-btn outline dense color="primary" icon="sym_o_add" padding=".5rem 1rem" @click="() => {}">
+      <q-btn outline dense color="primary" icon="sym_o_add" padding=".5rem 1rem" @click="setShowAddEmployee(true)">
         <q-tooltip anchor="center left" self="center end" class="bg-transparent text-primary text-overline">Agregar empleado</q-tooltip>
       </q-btn>
     </template>
@@ -31,7 +31,7 @@ const onLoad = () => {
       </template>
     </template>
   </PageLayout>
+  <AddEmployeeDialog />
 </template>
 
 <style lang="scss" scoped></style>
-src/modules/common
