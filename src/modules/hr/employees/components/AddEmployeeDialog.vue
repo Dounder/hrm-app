@@ -1,99 +1,63 @@
 <script setup lang="ts">
-import { QForm } from 'quasar';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
-import { DialogLayout, dateValidation, emailValidation, rangeValidation, requiredField, useNotify } from 'src/modules/common';
-import { NewEmployee, useEmployee } from '..';
+import { DialogLayout } from 'src/modules/common';
+import { EmployeeForm, NewEmployee, useEmployee, useEmployeeExtensions, useEmployeeMutation } from '..';
 
 const { showAddEmployee, setShowAddEmployee } = useEmployee();
-const { notify } = useNotify();
+const { departmentId } = useEmployeeExtensions();
+const { createEmployeeMutation } = useEmployeeMutation();
 
 const form: NewEmployee = reactive({
   name: '',
   email: '',
   phone: '',
-  dateHired: new Date().toLocaleDateString('en-CA'),
-  salary: null,
-  extraHourRate: null,
-  departmentId: 0,
-  positionId: 0,
+  dateHired: '',
+  salary: '0.00',
+  extraHourRate: '0.0',
+  departmentId: null,
+  positionId: null,
 });
-const employeeForm = ref<QForm | null>(null);
+const isLoading = ref(false);
 
 const onSubmit = async () => {
-  console.log(form);
+  isLoading.value = true;
 
-  // if (!employeeForm.value || !employeeForm.value.validate()) return;
+  await createEmployeeMutation.mutateAsync(form);
 
-  // notify({ type: 'positive', message: `El empleado ${form.name} ha sido creado exitosamente`, position: 'top-right' });
+  if (createEmployeeMutation.isSuccess.value) onReset();
 
-  // onReset();
+  isLoading.value = false;
 };
 
 const onReset = () => {
-  employeeForm.value?.resetValidation();
   setShowAddEmployee(false);
+  createEmployeeMutation.reset();
+  form.name = '';
+  form.email = '';
+  form.phone = '';
+  form.dateHired = new Date().toLocaleDateString('en-CA');
+  form.salary = '0.00';
+  form.extraHourRate = '0.0';
+  form.departmentId = null;
+  form.positionId = null;
 };
+
+watch(
+  () => form.departmentId,
+  (newId) => {
+    if (newId) departmentId.value = newId;
+  }
+);
 </script>
 
 <template>
   <DialogLayout :show="showAddEmployee" @on:hide="onReset">
-    <QForm ref="employeeForm" v-model="form" @submit="onSubmit" class="q-gutter-y-md">
-      <p class="text-h6 q-mb-lg flex justify-between items-end">
-        Agregar empleado
-        <small class="text-body2 text-overline text-grey-6">Requerido*</small>
-      </p>
-      <q-input filled v-model="form.name" type="text" label="Nombre*" :rules="[requiredField]" lazy-rules />
-      <q-input filled v-model="form.email" type="email" label="Correo electrónico*" :rules="[requiredField, emailValidation]" lazy-rules />
-      <q-input filled v-model="form.phone" type="text" label="Teléfono*" mask="####-####" unmasked-value :rules="[requiredField]" lazy-rules />
-      <q-input v-model="form.dateHired" filled type="date" label="Fecha de contratación*" :rules="[requiredField, dateValidation]" lazy-rules />
-      <section class="fit row justify-between">
-        <q-input
-          filled
-          v-model="form.salary"
-          label="Salario*"
-          mask="#.##"
-          fill-mask="#"
-          reverse-fill-mask
-          input-class="text-right"
-          :rules="[requiredField, (val) => rangeValidation(val, 1, 100000)]"
-          lazy-rules
-          class="col-6 q-col-gutter-sm"
-          hint="Quetzales (Q)"
-        />
-        <q-input
-          filled
-          v-model="form.extraHourRate"
-          label="Tarifa de horas extra"
-          mask="#.#"
-          fill-mask="#"
-          reverse-fill-mask
-          input-class="text-right"
-          :rules="[requiredField, (val) => rangeValidation(val, 1, 100000)]"
-          lazy-rules
-          class="col-6 q-col-gutter-sm"
-          hint="Porcentaje (%)"
-        />
-      </section>
-      <section class="fit row justify-between">
-        <q-select filled v-model="form.departmentId" :options="[]" label="Departamento" :rules="[]" lazy-rules class="col-6 q-col-gutter-sm" />
-        <q-select
-          filled
-          v-model="form.positionId"
-          :options="[]"
-          label="Puesto"
-          :rules="[]"
-          :disable="!form.departmentId"
-          lazy-rules
-          class="col-6 q-col-gutter-sm"
-        />
-      </section>
+    <q-inner-loading :showing="isLoading" dark>
+      <q-spinner-gears size="50px" color="primary" />
+    </q-inner-loading>
 
-      <div class="flex justify-end q-gutter-sm">
-        <q-btn no-caps label="Cancelar" type="button" color="negative" flat @click="onReset" />
-        <q-btn no-caps label="Crear" type="submit" color="primary" />
-      </div>
-    </QForm>
+    <EmployeeForm type="create" :form-data="form" ref="employeeForm" @on:submit="onSubmit" @on:reset="onReset" />
   </DialogLayout>
 </template>
 

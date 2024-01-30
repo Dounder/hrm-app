@@ -18,13 +18,16 @@ const onSubmit = async () => {
 
   await createUserMutation.mutateAsync(user);
 
-  notify({ type: 'positive', message: `El usuario ${user.username} ha sido creado exitosamente`, position: 'top-right' });
+  if (createUserMutation.isSuccess.value) {
+    notify({ type: 'positive', message: `El usuario ${user.username} ha sido creado exitosamente`, position: 'top-right' });
 
-  onReset();
+    onReset();
+  }
 };
 
 const onReset = () => {
   userForm.value?.resetValidation();
+  createUserMutation.reset();
   user.username = '';
   user.email = '';
   user.password = '';

@@ -3,14 +3,15 @@ import { Dialog } from 'quasar';
 interface Props {
   message: string;
   title: string;
+  html?: boolean;
   isDelete?: boolean;
   position?: 'top' | 'right' | 'bottom' | 'left' | 'standard' | undefined;
 }
 
 export const useDialog = () => {
   return {
-    alertDialog: ({ title, message }: Props) => {
-      Dialog.create({ title, message });
+    alertDialog: ({ title, message, html = false }: Props) => {
+      Dialog.create({ title, message, html });
     },
     confirmDialog: ({ title, message, isDelete = false, position = 'standard' }: Props) => {
       return Dialog.create({

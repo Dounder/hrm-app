@@ -25,9 +25,29 @@ export interface NewEmployee {
   name: string;
   email: string;
   phone: string;
-  salary: number | null;
+  salary: number | string;
   dateHired: string;
-  extraHourRate: number | null;
-  departmentId: number;
-  positionId: number;
+  extraHourRate: number | string;
+  departmentId: number | null;
+  positionId: number | null;
+}
+
+export interface EmployeeToUpdate extends NewEmployee {
+  id: number;
+}
+
+export interface AddEmployeeResponse {
+  message: string;
+  data: Data;
+}
+
+export interface Data {
+  id: number;
+  code: string;
+  user: EmployeeUser;
+}
+
+export interface EmployeeUser {
+  username: string;
+  password: string;
 }

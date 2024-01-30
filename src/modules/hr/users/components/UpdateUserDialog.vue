@@ -11,19 +11,26 @@ const { rolesQuery } = useRoles();
 const { notify } = useNotify();
 
 const userForm = ref<QForm | null>(null);
+const isLoading = ref(false);
 
 const onSubmit = async () => {
   if (!userForm.value || !userForm.value.validate() || !userToUpdate.value) return;
 
+  isLoading.value = true;
+
   await updateUserMutation.mutateAsync(userToUpdate.value);
 
-  notify({ type: 'positive', message: `El usuario ${userToUpdate.value.username} ha sido actualizado exitosamente`, position: 'top-right' });
+  isLoading.value = false;
 
-  onReset();
+  if (updateUserMutation.isSuccess.value) {
+    notify({ type: 'positive', message: `El usuario ${userToUpdate.value.username} ha sido actualizado exitosamente`, position: 'top-right' });
+    onReset();
+  }
 };
 
 const onReset = () => {
   userForm.value?.resetValidation();
+  updateUserMutation.reset();
   store.setUpdateDialog(false);
   store.setUser(null);
 };
@@ -40,6 +47,9 @@ watch(
 
 <template>
   <DialogLayout :show="showUpdateDialog" @on:hide="onReset">
+    <q-inner-loading :showing="isLoading" dark>
+      <q-spinner-gears size="50px" color="primary" />
+    </q-inner-loading>
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md" ref="userForm" v-if="userToUpdate">
       <p class="text-h6 q-mb-lg flex justify-between items-end">
         Editar usuario

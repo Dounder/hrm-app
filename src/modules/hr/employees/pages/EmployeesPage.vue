@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { PageLayout } from 'src/modules/common';
-import { useEmployees, EmployeeCard, useEmployee, AddEmployeeDialog } from '../';
+import { AddEmployeeDialog, EmployeeCard, useEmployee, useEmployees } from '../';
+import UpdateEmployeeDialog from '../components/UpdateEmployeeDialog.vue';
 
-const { isFetchingNextPage, employees, loadMore } = useEmployees();
+const { isFetchingNextPage, isLoading, employees, loadMore } = useEmployees();
 const { setShowAddEmployee } = useEmployee();
 
 const onLoad = () => {
@@ -13,7 +14,7 @@ const onLoad = () => {
 </script>
 
 <template>
-  <PageLayout :loading-more="isFetchingNextPage" @load:more="onLoad">
+  <PageLayout :loading-more="isFetchingNextPage || isLoading" @load:more="onLoad">
     <template v-slot:header>
       <h1 class="text-h4 q-ma-none">Empleados</h1>
       <q-btn outline dense color="primary" icon="sym_o_add" padding=".5rem 1rem" @click="setShowAddEmployee(true)">
@@ -32,6 +33,7 @@ const onLoad = () => {
     </template>
   </PageLayout>
   <AddEmployeeDialog />
+  <UpdateEmployeeDialog />
 </template>
 
 <style lang="scss" scoped></style>

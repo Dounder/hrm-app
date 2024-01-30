@@ -23,8 +23,21 @@ export const passwordValidation = (val: string) => {
   return true;
 };
 
-export const rangeValidation = (val: number, min = 0, max = 100) => {
-  const num = Number(val);
+export const rangeValidation = (val: string, min = 0, max = 100) => {
+  //? Remove $ and , from currency
+  const num = parseFloat(val.replace(/[$,]/g, '').trim());
+
+  if (isNaN(num)) return 'El valor debe ser un número';
+
+  if (num < min) return `El valor mínimo es ${min}`;
+
+  if (num > max) return `El valor máximo es ${max}`;
+
+  return true;
+};
+
+export const currencyValidation = (val: string, min = 0, max = 100) => {
+  const num = parseFloat(val.replace(/[$,]/g, '').trim());
 
   if (isNaN(num)) return 'El valor debe ser un número';
 
