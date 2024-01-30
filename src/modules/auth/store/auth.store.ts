@@ -53,5 +53,11 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
     },
+    updateAccessToken(accessToken: string) {
+      console.log('auth.store.ts: Updating access token', accessToken);
+      this.accessToken.value = accessToken;
+      console.log('auth.store.ts: New access token', this.accessToken.value);
+      this.saveInLocalStorage();
+    },
   };
 });

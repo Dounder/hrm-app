@@ -1,4 +1,5 @@
 import { storeToRefs } from 'pinia';
+
 import { api } from 'src/boot';
 import { LoginResponse } from '../interfaces';
 import { useAuthStore } from '../store/auth.store';
@@ -17,6 +18,7 @@ const useAuth = () => {
     user,
     accessToken,
     refreshToken,
+    store,
 
     //! Getters
     isAuthenticated: store.isAuthenticated,
@@ -25,6 +27,7 @@ const useAuth = () => {
     //? Methods
     loadDataFromLocalStorage: store.loadFromLocalStorage,
     logout: store.logout,
+    updateAccessToken: store.updateAccessToken,
     login: async ({ username, password }: LoginProps) => {
       try {
         const { data } = await api.post<LoginResponse>('/auth/login', { username, password });

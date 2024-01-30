@@ -31,6 +31,7 @@ const onLoad = () => {
       </article>
 
       <template v-else>
+        <div>{{ accessToken?.split('.')[2] }}</div>
         <UserCard v-for="user in users" :key="user.id" :user="user" />
       </template>
     </template>

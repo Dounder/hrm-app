@@ -47,11 +47,11 @@ const onReset = () => {
         </q-card-section>
         <q-card-section class="q-pt-xs flex flex-center full-width">
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md full-width" ref="formRef">
-            <div class="text-h2 q-mb-md">Log In</div>
+            <div class="text-h2 q-mb-md">Iniciar Sesión</div>
             <q-separator spaced />
             <q-input
               v-model="loginForm.username"
-              label="Username"
+              label="Nombre de usuario"
               :loading="isLoading"
               :readonly="isLoading"
               lazy-rules
@@ -60,7 +60,7 @@ const onReset = () => {
             />
             <q-input
               v-model="loginForm.password"
-              label="Password"
+              label="Contraseña"
               :type="viewPassword ? 'text' : 'password'"
               :loading="isLoading"
               :readonly="isLoading"
@@ -72,8 +72,8 @@ const onReset = () => {
               </template>
             </q-input>
             <div class="flex justify-end">
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-mr-sm" />
-              <q-btn label="Submit" type="submit" color="primary" />
+              <q-btn label="Reiniciar" type="reset" color="negative" flat class="q-mr-sm" />
+              <q-btn label="Iniciar Sesión" type="submit" color="primary" :loading="isLoading" />
             </div>
           </q-form>
         </q-card-section>
